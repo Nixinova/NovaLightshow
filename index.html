@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <!-- This supports light and dark mode automatically. -->
+    <link rel="stylesheet" href="https://esm.sh/@wooorm/starry-night@1/style/both.css">
+    <link rel="stylesheet" href="./index.css">
+    <script type="module">
+        import { run } from './index.mjs';
+        window.run = run;
+    </script>
+</head>
+
+<body>
+
+    <h1>LightShowSite</h1>
+    <p>Preview TextMate YAML syntax highlighting grammars for use on GitHub.</p>
+
+    <h2>Input</h2>
+    <form action="javascript:void(0)" onsubmit="run()">
+        <h3>Grammar (YAML)</h3>
+        <textarea id="grammar"></textarea>
+        <br>
+        <h3>Sample</h3>
+        <textarea id="sample"></textarea>
+        <br>
+        <button type="submit">Run</button>
+    </form>
+
+    <h2>Output</h2>
+    <output>
+    </output>
+
+</body>
+
+</html>
