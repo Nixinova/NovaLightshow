@@ -26,15 +26,17 @@
                     <option value="url">From URL</option>
                     <option value="text">From text</option>
                 </select>
+                <br>
                 <textarea id="grammar"></textarea>
             </div>
             <div class="half">
                 <!-- Sample -->
-                <h3>Sample</h3>
+                <h3>Sample content</h3>
                 <select id="sample-type" onchange="_.adjustTextareaSize()">
                     <option value="url">From URL</option>
                     <option value="text">From text</option>
                 </select>
+                <br>
                 <textarea id="sample"></textarea>
             </div>
         </div>
@@ -42,11 +44,17 @@
         <button type="submit">Run</button>
     </form>
 
-    <h2>Output</h2>
+    <h2>Highlighted output</h2>
     <output>
     </output>
     <br>
     <button onclick="_.saveToUrl()">Share</button>
+
+    <footer>
+        Created by <a href="https://nixinova.com" target="_blank">Nixinova</a>
+        <br>
+        Code available on <a href="https://github.com/Nixinova/NovaLightshow" target="_blank">GitHub</a>
+    </footer>
 
 </body>
 
