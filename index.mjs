@@ -38,15 +38,6 @@ export async function run() {
 }
 
 /**
- * Save the form data into the URL.
- */
-export function saveToUrl() {
-    window.history.pushState(null, null, `?grammar=${$('#grammar').value}&sample=${$('#sample').value}`);
-    navigator.clipboard.writeText(window.location.href);
-    alert('URL copied to clipboard');
-}
-
-/**
  * Grab from URL on first load if applicable.
  */
 export function initLoad() {
@@ -54,8 +45,22 @@ export function initLoad() {
 
     $('#grammar').value = getUrlParam('grammar');
     $('#sample').value = getUrlParam('sample');
+    $('#grammar-type').value = $('#grammar').value.startsWith('http') ? 'url' : 'text';
+    $('#sample-type').value = $('#sample').value.startsWith('http') ? 'url' : 'text';
     run();
+    adjustTextareaSize();
     window.history.pushState(null, null, window.location.pathname);
+}
+
+/**
+ * Save the form data into the URL.
+ */
+export function saveToUrl() {
+    const grammarData = encodeURIComponent($('#grammar').value);
+    const sampleData = encodeURIComponent($('#sample').value);
+    window.history.pushState(null, null, `?grammar=${grammarData}&sample=${sampleData}`);
+    navigator.clipboard.writeText(window.location.href);
+    alert('URL copied to clipboard');
 }
 
 /**
