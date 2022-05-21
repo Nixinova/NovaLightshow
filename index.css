@@ -1,7 +1,22 @@
 html {
-    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-    background: #0d1117;
-    color: #c9d1d9;
+    font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        background: #0d1117;
+        color: #c9d1d9;
+    }
+}
+
+body {
+    padding: 3em;
+}
+
+h1,
+h3,
+p {
+    text-align: center;
 }
 
 textarea {
@@ -9,12 +24,31 @@ textarea {
     height: 200px;
 }
 
+button {
+    width: 100px;
+    margin-left: calc(50% - 50px);
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #d1d1d1;
+    font-size: 1.1em;
+    font-weight: bold;
+}
 
 output {
     display: block;
     width: 100%;
     min-height: 100px;
-    font-family: monospace;
     border: 1px solid #30363d;
     border-radius: 6px;
+    white-space: pre-wrap;
+    font-family: monospace;
+}
+
+.flexed {
+    display: flex;
+    gap: 5%;
+}
+
+.half {
+    width: 50%;
 }

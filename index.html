@@ -15,13 +15,17 @@
     <h1>LightShowSite</h1>
     <p>Preview TextMate YAML syntax highlighting grammars for use on GitHub.</p>
 
-    <h2>Input</h2>
     <form action="javascript:void(0)" onsubmit="run()">
-        <h3>Grammar (YAML)</h3>
-        <textarea id="grammar"></textarea>
-        <br>
-        <h3>Sample</h3>
-        <textarea id="sample"></textarea>
+        <div class="flexed">
+            <div class="half">
+                <h3>Grammar (YAML)</h3>
+                <textarea id="grammar"></textarea>
+            </div>
+            <div class="half">
+                <h3>Sample</h3>
+                <textarea id="sample"></textarea>
+            </div>
+        </div>
         <br>
         <button type="submit">Run</button>
     </form>
