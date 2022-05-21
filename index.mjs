@@ -4,6 +4,8 @@ import yaml from "https://esm.sh/js-yaml@4?bundle"
 
 const $ = elem => document.querySelector(elem);
 
+const OPTIONS = ['grammar-type', 'grammar', 'sample-type', 'sample'];
+
 function getUrlParam(name) {
     const url = new URL(window.location.href);
     return url.searchParams.get(name);
@@ -43,10 +45,9 @@ export async function run() {
 export function initLoad() {
     if (!window.location.search) return;
 
-    $('#grammar').value = getUrlParam('grammar');
-    $('#sample').value = getUrlParam('sample');
-    $('#grammar-type').value = $('#grammar').value.startsWith('http') ? 'url' : 'text';
-    $('#sample-type').value = $('#sample').value.startsWith('http') ? 'url' : 'text';
+    OPTIONS.forEach(opt => {
+        $(`#${opt}`).value = getUrlParam(opt)
+    });
     run();
     adjustTextareaSize();
     window.history.pushState(null, null, window.location.pathname);
@@ -56,9 +57,11 @@ export function initLoad() {
  * Save the form data into the URL.
  */
 export function saveToUrl() {
-    const grammarData = encodeURIComponent($('#grammar').value);
-    const sampleData = encodeURIComponent($('#sample').value);
-    window.history.pushState(null, null, `?grammar=${grammarData}&sample=${sampleData}`);
+    const newUrl = new URL(window.location.href);
+    OPTIONS.forEach(opt => {
+        newUrl.searchParams.set(opt, $(`#${opt}`).value);
+    });
+    window.history.pushState(null, null, newUrl.search);
     navigator.clipboard.writeText(window.location.href);
     alert('URL copied to clipboard');
 }
