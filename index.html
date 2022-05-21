@@ -1,12 +1,12 @@
 <html>
 
 <head>
-    <!-- This supports light and dark mode automatically. -->
-    <link rel="stylesheet" href="https://esm.sh/@wooorm/starry-night@1/style/both.css">
     <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="https://esm.sh/@wooorm/starry-night@1/style/both.css">
     <script type="module">
-        import { run } from './index.mjs';
-        window.run = run;
+        import * as _ from './index.mjs';
+        window._ = _;
+        _.initLoad();
     </script>
 </head>
 
@@ -15,14 +15,24 @@
     <h1>LightShowSite</h1>
     <p>Preview TextMate YAML syntax highlighting grammars for use on GitHub.</p>
 
-    <form action="javascript:void(0)" onsubmit="run()">
+    <form action="javascript:void(0)" onsubmit="_.run()">
         <div class="flexed">
             <div class="half">
+                <!-- Grammar -->
                 <h3>Grammar (YAML)</h3>
+                <select id="grammar-type" onchange="_.adjustTextareaSize()">
+                    <option value="url">From URL</option>
+                    <option value="text">From text</option>
+                </select>
                 <textarea id="grammar"></textarea>
             </div>
             <div class="half">
+                <!-- Sample -->
                 <h3>Sample</h3>
+                <select id="sample-type" onchange="_.adjustTextareaSize()">
+                    <option value="url">From URL</option>
+                    <option value="text">From text</option>
+                </select>
                 <textarea id="sample"></textarea>
             </div>
         </div>
@@ -33,6 +43,8 @@
     <h2>Output</h2>
     <output>
     </output>
+    <br>
+    <button onclick="_.saveToUrl()">Share</button>
 
 </body>
 

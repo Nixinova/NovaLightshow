@@ -21,7 +21,14 @@ p {
 
 textarea {
     width: 100%;
+}
+
+textarea.text {
     height: 200px;
+}
+
+textarea.url {
+    height: 40px;
 }
 
 button {
