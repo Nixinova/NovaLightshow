@@ -4,8 +4,9 @@ import yaml from "https://esm.sh/js-yaml@4?bundle"
 import plist from "https://esm.sh/plist@3?bundle"
 
 const PARSERS = {
-    yaml: yaml.load,
-    plist: plist.parse,
+    'json': JSON.parse,
+    'yaml': yaml.load,
+    'plist': plist.parse,
 };
 
 const $ = elem => document.querySelector(elem);
@@ -41,9 +42,11 @@ export async function run() {
     const sampleType = $('#sample-type').value;
     const grammar = grammarType.includes('text') ? grammarInput : await fetch(grammarInput).then(data => data.text());
     const sample = sampleType.includes('text') ? sampleInput : await fetch(sampleInput).then(data => data.text());
-    let fileType;
+    let fileType = 'json';
     if (grammarType === 'url') {
-        if (/\.(yaml|yaml-tmlanguage)$/i.test(grammarInput))
+        if (/\.(json|json-tmlanguage)$/i.test(grammarInput))
+            fileType = 'json';
+        else if (/\.(yaml|yaml-tmlanguage)$/i.test(grammarInput))
             fileType = 'yaml';
         else if (/\.(xml|tmlanguage)$/i.test(grammarInput))
             fileType = 'plist';
@@ -51,6 +54,8 @@ export async function run() {
     else {
         if (/<!doctype\s*plist/i.test(grammar))
             fileType = 'plist';
+        if (/^\s*\{/i.test(grammar))
+            fileType = 'json';
         else if (/^\s*\w+:\s*$/m.test(grammar))
             fileType = 'yaml';
     }

@@ -5,13 +5,13 @@ A website to preview how a TextMate grammar will apply syntax highlighting to as
 
 A replacement for the now-defunct GitHub Lightshow.
 
-Supports YAML and XML PList grammars.
+Supports JSON, YAML, and XML PList grammars.
 
 ---
 
 > [**Try it out!**](https://novalightshow.netlify.app)
 
-----
+---
 
 ## URL API
 > `https://novalightshow.netlify.app/?grammar-type={text|url}&grammar=<content|url>&sample-type={text|url}&sample=<content|url>`
