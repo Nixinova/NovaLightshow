@@ -1,6 +1,12 @@
-import { createStarryNight, common } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
+import { createStarryNight } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
 import { toHtml } from "https://esm.sh/hast-util-to-html@8?bundle"
 import yaml from "https://esm.sh/js-yaml@4?bundle"
+import plist from "https://esm.sh/plist@3?bundle"
+
+const PARSERS = {
+    yaml: yaml.load,
+    plist: plist.parse,
+};
 
 const $ = elem => document.querySelector(elem);
 
@@ -13,10 +19,10 @@ function getUrlParam(name) {
 
 /**
  * Applies highlighting from a grammar to a sample.
- * @returns {Promise<string>} A tree of HTML elements.
+ * @returns {Promise<string>} A HAST tree of HTML elements.
  */
-async function applyHighlighting(grammar, sample) {
-    const grammarJson = yaml.load(grammar);
+async function applyHighlighting(type, grammar, sample) {
+    const grammarJson = PARSERS[type](grammar);
     grammarJson.extensions ??= [];
     grammarJson.names ??= [];
 
@@ -33,9 +39,22 @@ export async function run() {
     const sampleInput = $('#sample').value;
     const grammarType = $('#grammar-type').value;
     const sampleType = $('#sample-type').value;
-    const grammar = grammarType == 'text' ? grammarInput : await fetch(grammarInput).then(data => data.text());
-    const sample = sampleType == 'text' ? sampleInput : await fetch(sampleInput).then(data => data.text());
-    const highlightTree = await applyHighlighting(grammar, sample);
+    const grammar = grammarType.includes('text') ? grammarInput : await fetch(grammarInput).then(data => data.text());
+    const sample = sampleType.includes('text') ? sampleInput : await fetch(sampleInput).then(data => data.text());
+    let fileType;
+    if (grammarType === 'url') {
+        if (/\.(yaml|yaml-tmlanguage)$/i.test(grammarInput))
+            fileType = 'yaml';
+        else if (/\.(xml|tmlanguage)$/i.test(grammarInput))
+            fileType = 'plist';
+    }
+    else {
+        if (/<!doctype\s*plist/i.test(grammar))
+            fileType = 'plist';
+        else if (/^\s*\w+:\s*$/m.test(grammar))
+            fileType = 'yaml';
+    }
+    const highlightTree = await applyHighlighting(fileType, grammar, sample);
     $('output').innerHTML = toHtml(highlightTree);
 }
 
@@ -46,7 +65,7 @@ export function initLoad() {
     if (!window.location.search) return;
 
     OPTIONS.forEach(opt => {
-        $(`#${opt}`).value = getUrlParam(opt)
+        $(`#${opt}`).value = getUrlParam(opt);
     });
     run();
     adjustTextareaSize();
@@ -70,6 +89,6 @@ export function saveToUrl() {
  * Change size of textarea to fit the expected content.
  */
 export function adjustTextareaSize() {
-    $('#grammar').className = $('#grammar-type').value;
+    $('#grammar').className = $('#grammar-type').value.split('-')[0];
     $('#sample').className = $('#sample-type').value;
 }
