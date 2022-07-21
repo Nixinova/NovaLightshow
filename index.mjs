@@ -1,10 +1,12 @@
 import { createStarryNight } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
 import { toHtml } from "https://esm.sh/hast-util-to-html@8?bundle"
+import cson from "https://esm.sh/cson2json@1?bundle"
 import yaml from "https://esm.sh/js-yaml@4?bundle"
 import plist from "https://esm.sh/plist@3?bundle"
 
 const PARSERS = {
     'json': JSON.parse,
+    'cson': cson,
     'yaml': yaml.load,
     'plist': plist.parse,
 };
@@ -38,7 +40,7 @@ async function applyHighlighting(type, grammar, sample) {
 export async function run() {
     load()
         .then(data => {
-            $('output').innerHTML = toHtml(toHtml(data));
+            $('output').innerHTML = toHtml(data);
         })
         .catch(err => {
             $('output').innerHTML = `<details><summary>An error occurred</summary>${err}</details>`;
@@ -59,6 +61,8 @@ export async function load() {
     if (grammarType === 'url') {
         if (/\.(json|json-tmlanguage)$/i.test(grammarInput))
             fileType = 'json';
+        if (/\.(cson|cson-tmlanguage)$/i.test(grammarInput))
+            fileType = 'cson';
         else if (/\.(yaml|yaml-tmlanguage)$/i.test(grammarInput))
             fileType = 'yaml';
         else if (/\.(xml|tmlanguage)$/i.test(grammarInput))
@@ -69,7 +73,9 @@ export async function load() {
             fileType = 'plist';
         if (/^\s*\{/i.test(grammar))
             fileType = 'json';
-        else if (/^\s*\w+:\s*$/m.test(grammar))
+        else if (/^\w+:\s*\[\s*$/m.test(grammar))
+            fileType = 'cson';
+        else if (/^\w+:\s*$/m.test(grammar))
             fileType = 'yaml';
     }
     const highlightTree = await applyHighlighting(fileType, grammar, sample);
@@ -88,6 +94,7 @@ export function initLoad() {
     run();
     adjustTextareaSize();
     window.history.pushState(null, null, window.location.pathname);
+    $('#loading').innerText = '';
 }
 
 /**
