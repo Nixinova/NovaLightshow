@@ -36,6 +36,19 @@ async function applyHighlighting(type, grammar, sample) {
  * Runs highlighting process from the webpage.
  */
 export async function run() {
+    load()
+        .then(data => {
+            $('output').innerHTML = toHtml(toHtml(data));
+        })
+        .catch(err => {
+            $('output').innerHTML = `<details><summary>An error occurred</summary>${err}</details>`;
+        });
+}
+
+/**
+ * Loads the grammar and sample from input and creates a highlighting tree.
+ */
+export async function load() {
     const grammarInput = $('#grammar').value;
     const sampleInput = $('#sample').value;
     const grammarType = $('#grammar-type').value;
@@ -60,7 +73,7 @@ export async function run() {
             fileType = 'yaml';
     }
     const highlightTree = await applyHighlighting(fileType, grammar, sample);
-    $('output').innerHTML = toHtml(highlightTree);
+    return highlightTree;
 }
 
 /**
