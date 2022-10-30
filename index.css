@@ -41,6 +41,14 @@ button {
     font-weight: bold;
 }
 
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
 output {
     display: block;
     width: 100%;

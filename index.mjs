@@ -1,4 +1,4 @@
-import { createStarryNight } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
+import { createStarryNight, common } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
 import { toHtml } from "https://esm.sh/hast-util-to-html@8?bundle"
 import cson from "https://esm.sh/cson2json@1?bundle"
 import yaml from "https://esm.sh/js-yaml@4?bundle"
@@ -24,12 +24,14 @@ function getUrlParam(name) {
  * Applies highlighting from a grammar to a sample.
  * @returns {Promise<string>} A HAST tree of HTML elements.
  */
-async function applyHighlighting(type, grammar, sample) {
+async function applyHighlighting(type, grammar, sample, includeCommonGrammars) {
     const grammarJson = PARSERS[type](grammar);
     grammarJson.extensions ??= [];
     grammarJson.names ??= [];
 
-    const starryNight = await createStarryNight([grammarJson]);
+    const grammars = includeCommonGrammars ? [...common, grammarJson] : [grammarJson];
+
+    const starryNight = await createStarryNight(grammars);
     const tree = starryNight.highlight(sample, grammarJson.scopeName);
     return tree;
 }
@@ -55,6 +57,7 @@ export async function load() {
     const sampleInput = $('#sample').value;
     const grammarType = $('#grammar-type').value;
     const sampleType = $('#sample-type').value;
+    const includeCommonGrammars = $('#include-common').checked;
     const grammar = grammarType.includes('text') ? grammarInput : await fetch(grammarInput).then(data => data.text());
     const sample = sampleType.includes('text') ? sampleInput : await fetch(sampleInput).then(data => data.text());
     let fileType = 'json';
@@ -78,7 +81,7 @@ export async function load() {
         else if (/^\w+:\s*$/m.test(grammar))
             fileType = 'yaml';
     }
-    const highlightTree = await applyHighlighting(fileType, grammar, sample);
+    const highlightTree = await applyHighlighting(fileType, grammar, sample, includeCommonGrammars);
     return highlightTree;
 }
 
