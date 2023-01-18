@@ -1,0 +1,29 @@
+{
+  "name": "novalightshow",
+  "version": "1",
+  "description": "Preview TextMate syntax highlighting grammars for use on GitHub.",
+  "homepage": "https://nixinova.github.io/NovaLightshow/",
+  "bugs": {
+    "url": "https://github.com/Nixinova/NovaLightshow/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nixinova/NovaLightshow.git"
+  },
+  "license": "ISC",
+  "author": "Nixinova (https://nixinova.com)",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "http-server"
+  },
+  "dependencies": {
+    "@wooorm/starry-night": "^1",
+    "cson2json": "^2",
+    "hast-util-to-html": "^8",
+    "js-yaml": "^4",
+    "plist": "^3"
+  },
+  "devDependencies": {
+    "http-server": "^14"
+  }
+}

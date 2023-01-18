@@ -1,6 +1,7 @@
+// !! Sync imports with package.json !!
 import { createStarryNight, common } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
+import cson from "https://esm.sh/cson2json@2?bundle"
 import { toHtml } from "https://esm.sh/hast-util-to-html@8?bundle"
-import cson from "https://esm.sh/cson2json@1?bundle"
 import yaml from "https://esm.sh/js-yaml@4?bundle"
 import plist from "https://esm.sh/plist@3?bundle"
 
