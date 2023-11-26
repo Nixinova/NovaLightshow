@@ -27,8 +27,10 @@ function getUrlParam(name) {
  */
 async function applyHighlighting(type, grammar, sample, includeCommonGrammars) {
     const grammarJson = PARSERS[type](grammar);
+    // Set defaults if values are unset
     grammarJson.extensions ??= [];
     grammarJson.names ??= [];
+    grammarJson.scopeName ??= grammarJson.scope; // Set scope if it is under different key in source
 
     const grammars = includeCommonGrammars ? [...common, grammarJson] : [grammarJson];
 
@@ -46,6 +48,7 @@ export async function run() {
             $('output').innerHTML = toHtml(data);
         })
         .catch(err => {
+            console.error(err);
             $('output').innerHTML = `<details><summary>An error occurred</summary>${err}</details>`;
         });
 }
