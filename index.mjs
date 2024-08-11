@@ -12,7 +12,7 @@ const PARSERS = {
     'plist': plist.parse,
 };
 
-const $ = elem => document.querySelector(elem);
+export const $ = elem => document.querySelector(elem);
 
 const OPTIONS = ['grammar-type', 'grammar', 'sample-type', 'sample'];
 
@@ -85,6 +85,7 @@ export async function load() {
         else if (/^\w+:\s*$/m.test(grammar))
             fileType = 'yaml';
     }
+    $('#autodetected').innerText = `Detected format: ${fileType.toUpperCase()}.`;
     const highlightTree = await applyHighlighting(fileType, grammar, sample, includeCommonGrammars);
     return highlightTree;
 }

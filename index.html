@@ -25,10 +25,11 @@
             <div class="half">
                 <!-- Grammar -->
                 <h3>Grammar <small>(JSON/CSON/YAML/XML)</small></h3>
-                <select id="grammar-type" onchange="_.adjustTextareaSize()">
+                <select id="grammar-type" onchange="_.adjustTextareaSize();_.$('#autodetected').innerText='';">
                     <option value="url">From URL</option>
                     <option value="text">From text</option>
                 </select>
+                <small id="autodetected"></small>
                 <br>
                 <textarea id="grammar"></textarea>
             </div>
