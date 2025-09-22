@@ -62,15 +62,20 @@ function checkGrammar(grammarJson) {
  * Runs highlighting process from the webpage.
  */
 export async function run() {
-    $('output').innerHTML = '';
-    $('#warningOutput').innerHTML = '';
+    document.querySelectorAll('output').forEach(elem => {
+        elem.innerText = '';
+    })
     load()
         .then(data => {
-            $('output').innerHTML = toHtml(data);
+            const html = toHtml(data);
+            // Show the prettylights output
+            $('#output').innerHTML = html;
+            // Also show the node output
+            $('#htmlOutput').innerHTML = html.replace(/<(\/?)span(?: class="pl-([\w-]+)")?>/g, '<span class="pl-c">&lt;$1$2&gt;</span>');
         })
         .catch(err => {
             console.error(err);
-            $('output').innerHTML = `<details><summary>An error occurred</summary>${err}</details>`;
+            $('#output').innerHTML = `<details><summary>An error occurred</summary>${err}</details>`;
         });
 }
 
