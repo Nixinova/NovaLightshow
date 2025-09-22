@@ -59,6 +59,11 @@ output {
     font-family: monospace;
 }
 
+#warningOutput {
+    color: rgb(238, 211, 170);
+    font-size: 90%;
+}
+
 footer {
     background-color: #0004;
     position: fixed;

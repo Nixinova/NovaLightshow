@@ -1,5 +1,5 @@
 // !! Sync imports with package.json !!
-import { createStarryNight, common } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
+import { common, createStarryNight } from 'https://esm.sh/@wooorm/starry-night@1?bundle'
 import cson from "https://esm.sh/cson2json@2?bundle"
 import { toHtml } from "https://esm.sh/hast-util-to-html@8?bundle"
 import yaml from "https://esm.sh/js-yaml@4?bundle"
@@ -30,7 +30,10 @@ async function applyHighlighting(type, grammar, sample, includeCommonGrammars) {
     // Set defaults if values are unset
     grammarJson.extensions ??= [];
     grammarJson.names ??= [];
+    grammarJson.repository ??= [];
     grammarJson.scopeName ??= grammarJson.scope; // Set scope if it is under different key in source
+
+    checkGrammar(grammarJson);
 
     const grammars = includeCommonGrammars ? [...common, grammarJson] : [grammarJson];
 
@@ -40,9 +43,27 @@ async function applyHighlighting(type, grammar, sample, includeCommonGrammars) {
 }
 
 /**
+ * Checks a grammar JSON for invalid or problematic syntax.
+ */
+function checkGrammar(grammarJson) {
+    const doubleScopeMatch = JSON.stringify([grammarJson.patterns, grammarJson.repository])
+        .match(/"name":"[^"]+[ ][^"]+"/);
+    if (doubleScopeMatch) {
+        $('#warningOutput').innerHTML = `
+            Warning for \`<code>${doubleScopeMatch}</code>\`:
+            <br>
+            While VSCode splits scopes on spaces, TextMate and GitHub do not.
+            This style therefore may not apply as expected.
+        `;
+    }
+}
+
+/**
  * Runs highlighting process from the webpage.
  */
 export async function run() {
+    $('output').innerHTML = '';
+    $('#warningOutput').innerHTML = '';
     load()
         .then(data => {
             $('output').innerHTML = toHtml(data);
