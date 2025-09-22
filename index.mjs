@@ -78,11 +78,11 @@ export async function load() {
     else {
         if (/<!doctype\s*plist/i.test(grammar))
             fileType = 'plist';
-        if (/^\s*\{/i.test(grammar))
+        else if (/^\s*\{/i.test(grammar))
             fileType = 'json';
-        else if (/^\w+:\s*\[\s*$/m.test(grammar))
+        else if (/^['"]?\w+['"]?:\s*\[/m.test(grammar))
             fileType = 'cson';
-        else if (/^\w+:\s*$/m.test(grammar))
+        else if (/^\w+:/m.test(grammar))
             fileType = 'yaml';
     }
     $('#autodetected').innerText = `Detected format: ${fileType.toUpperCase()}.`;
